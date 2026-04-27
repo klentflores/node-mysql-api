@@ -12,9 +12,9 @@ import { DataTypes } from 'sequelize';
             isExpired: {
             type: DataTypes. VIRTUAL,
             get() { return Date.now() >= this.expires; }
-        }
+        },
         isActive: {
-            type: DataTypes. VIRTUAL,
+            type: DataTypes.VIRTUAL,
             get() { return !this.revoked && !this.isExpired; }
         }
     };

@@ -33,13 +33,15 @@ function authenticateSchema(req: any, res: any, next: any) {
 function authenticate(req: any, res: any, next: any) {
     const { email, password } = req.body;
     const ipAddress = req.ip;
-        accountService.authenticate({ email, password, ipAddress })
-        .then(({ refreshToken, ... account }: any) => {
+    accountService.authenticate({ email, password, ipAddress })
+        .then(({ refreshToken, ...account }: any) => {
             setTokenCookie(res, refreshToken);
             res.json(account);
-        });
+        })
         .catch(next);
 }
+
+
 
 function refreshToken(req: any, res: any, next: any) {
     const token = req. cookies. refreshToken;
@@ -48,7 +50,7 @@ function refreshToken(req: any, res: any, next: any) {
         .then(({ refreshToken, ... account }: any) => {
             setTokenCookie(res, refreshToken);
             res.json(account);
-        });
+        })
         .catch(next);
 }
 
@@ -60,7 +62,7 @@ function revokeTokenSchema(req: any, res: any, next: any) {
 }
 
 function revokeToken(req: any, res: any, next: any) {
-    const token = req.body. token | | req. cookies. refreshToken;
+    const token = req.body. token || req. cookies. refreshToken;
     const ipAddress = req.ip;
 
     if (!token) return res.status(400).json({ message: 'Token is required' });

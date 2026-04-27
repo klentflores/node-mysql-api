@@ -24,19 +24,18 @@ export default {
 };
 
 async function authenticate({ email, password, ipAddress }: any) {
-    const account = await db. Account. scope('withHash' ) . findOne({ where: { email } });
+    const account = await db.Account.scope('withHash' ).findOne({ where: { email } });
 
-    if (!account || !account. isVerified || !(await bcrypt. compare(password, account.passwordHash) )) {
+    if (!account || !account.isVerified || !(await bcrypt.compare(password, account.passwordHash) )) {
         throw 'Email or password is incorrect';
     }
 
     const jwtToken = generateJwtToken(account);
     const refreshToken = generateRefreshToken(account, ipAddress);
-
     await refreshToken.save();
 
     return {
-        ... basicDetails(account),
+        ...basicDetails(account),
         jwtToken,
         refreshToken: refreshToken.token
     };
@@ -56,9 +55,9 @@ async function refreshToken({ token, ipAddress }: any) {
     const jwtToken = generateJwtToken(account);
 
     return {
-        ... basicDetails(account),
+        ...basicDetails(account),
         jwtToken,
-        refreshToken: newRefreshToken. token
+        refreshToken: newRefreshToken.token
     };
 }
 
@@ -67,7 +66,7 @@ async function revokeToken({ token, ipAddress }: any) {
 
     refreshToken.revoked = Date. now();
     refreshToken.revokedByIp = ipAddress;
-    await refreshToken. save();
+    await refreshToken.save();
 }
 
 async function register(params: any, origin: any) {
@@ -80,12 +79,11 @@ async function register(params: any, origin: any) {
     const isFirstAccount = (await db.Account.count()) === 0;
     account.role = isFirstAccount ? Role.Admin : Role. User;
     account.verificationToken = randomTokenString();
-
     account.passwordHash = await hash(params.password);
-
     await account.save();
 
     await sendVerificationEmail(account, origin);
+}
 
 async function verifyEmail({ token }: any) {
     const account = await db.Account.findOne({ where: { verificationToken: token } }) ;
