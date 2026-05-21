@@ -1,0 +1,19 @@
+{
+    "database": {
+        "host": "153.92.15.31",
+        "port": 3306,
+        "user": "u875409848_flores",
+        "password": "2qW^sUg=M",
+        "database": "u875409848_flores"
+    },
+    "secret": "SUPER_SECRET_KEY_REPLACE_ME_IN_PRODUCTION",
+    "emailFrom": "info@my-node-api.com",
+    "smtpOptions": {
+        "host": "smtp.ethereal.email",
+        "port": 587,
+        "auth": {
+            "user": "soledad.ebert@ethereal.email",
+            "pass": "g6Xkd8u3M4qdaUmKQb"
+        }
+    }
+}
