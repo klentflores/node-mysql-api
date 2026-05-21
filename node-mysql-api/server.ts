@@ -12,7 +12,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-app.use(cors({ origin: (origin, callback) => callback(null, true), credentials: true }) );
+app.use(cors({
+  origin: 'https://angular-21-boilerplate-c31z.onrender.com',
+  credentials: true
+}));
+
 
 app.use('/accounts', accountsController);
 
