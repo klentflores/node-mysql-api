@@ -17,7 +17,6 @@ app.use(cors({
   credentials: true
 }));
 
-
 app.use('/accounts', accountsController);
 
 app.use('/api-docs', swaggerDocs);
