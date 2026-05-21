@@ -1,7 +1,246 @@
 openapi: 3.0.0
 info:
-  title: Node MySQL API
+  title: Node.js Sign-up and Verification API
+  description: Node.js + MySQL - API with email sign-up, verification, authentication and forgot password
   version: 1.0.0
+
 servers:
   - url: http://localhost:4000
-paths: {}
+    description: Local development server
+
+paths:
+  /accounts/authenticate:
+    post:
+      summary: Authenticate account credentials and return a JWT token and a cookie with a refresh token
+      operationId: authenticate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: admin@example.com
+                password:
+                  type: string
+                  example: admin
+              required:
+                - email
+                - password
+      responses:
+        "200":
+          description: Account details, a JWT access token and a refresh token cookie
+
+  /accounts/refresh-token:
+    post:
+      summary: Use a refresh token to generate a new JWT token and a new refresh token
+      operationId: refreshToken
+      responses:
+        "200":
+          description: Account details, a new JWT access token and a new refresh token cookie
+
+  /accounts/revoke-token:
+    post:
+      summary: Revoke a refresh token
+      operationId: revokeToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+      responses:
+        "200":
+          description: Token revoked
+
+  /accounts/register:
+    post:
+      summary: Register a new user account and send a verification email
+      operationId: register
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: Mr
+                firstName:
+                  type: string
+                  example: John
+                lastName:
+                  type: string
+                  example: Doe
+                email:
+                  type: string
+                  example: john@example.com
+                password:
+                  type: string
+                  example: password123
+                confirmPassword:
+                  type: string
+                  example: password123
+                acceptTerms:
+                  type: boolean
+                  example: true
+      responses:
+        "200":
+          description: Registration successful
+
+  /accounts/verify-email:
+    post:
+      summary: Verify a new account with a verification token
+      operationId: verifyEmail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+      responses:
+        "200":
+          description: Verification successful
+
+  /accounts/forgot-password:
+    post:
+      summary: Submit email address to reset the password on an account
+      operationId: forgotPassword
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: john@example.com
+      responses:
+        "200":
+          description: Password reset email sent
+
+  /accounts/validate-reset-token:
+    post:
+      summary: Validate the reset password token
+      operationId: validateResetToken
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+      responses:
+        "200":
+          description: Token is valid
+
+  /accounts/reset-password:
+    post:
+      summary: Reset the password for an account
+      operationId: resetPassword
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                password:
+                  type: string
+                confirmPassword:
+                  type: string
+      responses:
+        "200":
+          description: Password reset successful
+
+  /accounts:
+    get:
+      summary: Get a list of all accounts (Admin only)
+      operationId: getAll
+      responses:
+        "200":
+          description: List of accounts
+    post:
+      summary: Create a new account (Admin only)
+      operationId: create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                confirmPassword:
+                  type: string
+                role:
+                  type: string
+                  enum: [Admin, User]
+      responses:
+        "200":
+          description: Account created
+
+  /accounts/{id}:
+    get:
+      summary: Get a single account by ID
+      operationId: getById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Account details
+    put:
+      summary: Update an account
+      operationId: update
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: Account updated
+    delete:
+      summary: Delete an account
+      operationId: delete
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Account deleted
