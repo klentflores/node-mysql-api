@@ -44,15 +44,21 @@ function authenticate(req: any, res: any, next: any) {
 
 
 function refreshToken(req: any, res: any, next: any) {
-    const token = req. cookies. refreshToken;
+    const token = req.body.token || req.cookies.refreshToken;  // <-- check body too
     const ipAddress = req.ip;
-        accountService. refreshToken({ token, ipAddress })
-        .then(({ refreshToken, ... account }: any) => {
+
+    if (!token) {
+        return res.status(400).json({ message: 'Refresh token is required' });
+    }
+
+    accountService.refreshToken({ token, ipAddress })
+        .then(({ refreshToken, ...account }: any) => {
             setTokenCookie(res, refreshToken);
             res.json(account);
         })
         .catch(next);
 }
+
 
 function revokeTokenSchema(req: any, res: any, next: any) {
     const schema = Joi. object({
