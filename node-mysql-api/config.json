@@ -7,14 +7,14 @@
     "database": "u875409848_flores"
 
 },
-  "secret": "SUPER_SECRET_KEY_REPLACE_ME_IN_PRODUCTION",
+  "secret": "flores_klent_super_secret_jwt_2026",
   "emailFrom": "klentflores25@gmail.com",
   "smtpOptions": {
-    "host": "sandbox.smtp.mailtrap.io",
-    "port": 2525,
+    "host": "smtp.gmail.com",
+    "port": 587,
     "auth": {
-      "user": "9bf9e3a9d25b50",
-      "pass": "****39ae"
+      "user": "klentflores25@gmail.com",
+      "pass": "abcdefghijklmnop"
     }
   }
 }
